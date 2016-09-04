@@ -28,24 +28,25 @@ public class UserMealsUtil {
     }
 
     public static List<UserMealWithExceed>  getFilteredWithExceeded(List<UserMeal> mealList, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-//      caloriesPerDaySums collect only day summaries of filtered (startTime,endTime) meals.
-//      We need caloriesPerDaySums to exclude redundant calculations.
-        Map<LocalDate, Integer> caloriesPerDaySums = new HashMap<>();
+//      We need isDateExceededMap to exclude redundant calculations.
+        Map<LocalDate, Boolean> isDateExceededMap = new HashMap<>();
         List<UserMealWithExceed> mealListWithExceeded = new ArrayList<>();
 
         mealList.stream()
                 .filter(meal -> TimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime))
                 .forEach(currentMeal -> {
                     LocalDate mealDate = currentMeal.getDateTime().toLocalDate();
-                    if (!(caloriesPerDaySums.containsKey(mealDate))) {
+//                  this if statement lets calculate calories sum for each date just one time
+                    if (!(isDateExceededMap.containsKey(currentMeal.getDateTime().toLocalDate()))) {
                         int caloriesSum = mealList.stream()
                                 .filter(meal -> meal.getDateTime().toLocalDate().equals(mealDate))
                                 .mapToInt(meal -> meal.getCalories())
                                 .sum();
-                        caloriesPerDaySums.put(mealDate, caloriesSum);
+                        isDateExceededMap.put(mealDate, caloriesSum > caloriesPerDay);
                     }
-                    boolean exceed = caloriesPerDaySums.get(mealDate) > caloriesPerDay;
-                    mealListWithExceeded.add(new UserMealWithExceed(currentMeal.getDateTime(), currentMeal.getDescription(), currentMeal.getCalories(), exceed));
+                    mealListWithExceeded.add(new UserMealWithExceed(
+                            currentMeal.getDateTime(), currentMeal.getDescription(), currentMeal.getCalories(), isDateExceededMap.get(mealDate)
+                    ));
                 });
 
         return mealListWithExceeded;
