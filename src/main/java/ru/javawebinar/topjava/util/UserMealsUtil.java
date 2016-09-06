@@ -34,7 +34,6 @@ public class UserMealsUtil {
                 .stream()
                 .collect(Collectors.groupingBy(meal -> meal.getDateTime().toLocalDate(),
                         Collectors.summingInt(UserMeal::getCalories)));
-        System.out.println("");
         return mealList
                 .stream()
                 .filter(meal -> TimeUtil.isBetween(meal.getDateTime().toLocalTime(), startTime, endTime))
