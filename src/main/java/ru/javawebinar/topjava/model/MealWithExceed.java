@@ -2,10 +2,6 @@ package ru.javawebinar.topjava.model;
 
 import java.time.LocalDateTime;
 
-/**
- * GKislin
- * 11.01.2015.
- */
 public class MealWithExceed {
     private final LocalDateTime dateTime;
 
