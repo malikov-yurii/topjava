@@ -1,0 +1,30 @@
+1. Why generic looks like that
+    public static <T extends Comparable<? super T>> boolean isBetween(T value, T start, T end) {
+        return value.compareTo(start) >= 0 && value.compareTo(end) <= 0;
+    }
+	
+2. in Meal class why we have Integer id state, but in BaseEntity too?
+
+ public class Meal extends BaseEntity {
+    private Integer id;
+
+    private final LocalDateTime dateTime;
+
+    private final String description;
+
+    private final int calories;
+
+    public Meal(LocalDateTime dateTime, String description, int calories) {
+        this(null, dateTime, description, calories);
+    }
+
+    public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {
+        super(id);
+
+3. Why do we need this method?
+
+    private String resetParam(String param, HttpServletRequest request) {
+        String value = request.getParameter(param);
+        request.setAttribute(param, value);
+        return value;
+    }
