@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
@@ -47,6 +48,8 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userId) {
+        if (AuthorizedUser.id() != userId)
+            return null;
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", meal.getId())
                 .addValue("date_time", meal.getDateTime())
@@ -78,7 +81,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
-        return jdbcTemplate.query("SELECT * FROM MEALS WHERE user_id = ? ORDER BY date_time", ROW_MAPPER, userId);
+        return jdbcTemplate.query("SELECT * FROM MEALS WHERE user_id = ? ORDER BY date_time DESC", ROW_MAPPER, userId);
     }
 
     @Override
@@ -86,6 +89,6 @@ public class JdbcMealRepositoryImpl implements MealRepository {
         return jdbcTemplate.query("SELECT * FROM MEALS " +
                 "WHERE ? < date_time AND date_time < ? AND user_id = ?" +
                 "ORDER BY date_time",
-                ROW_MAPPER, Timestamp.valueOf(startDate), Timestamp.valueOf(endDate), userId);
+                ROW_MAPPER, startDate, endDate, userId);
     }
 }
