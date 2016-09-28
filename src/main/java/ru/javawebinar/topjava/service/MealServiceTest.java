@@ -14,7 +14,7 @@ import java.util.Collection;
  * 06.03.2015.
  */
 @Service
-public class MealServiceImpl implements MealService {
+public class MealServiceTest implements MealService {
 
     @Autowired
     private MealRepository repository;
