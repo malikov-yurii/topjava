@@ -16,7 +16,7 @@ import java.util.List;
 public class JdbcMealRepositoryImpl implements MealRepository {
 
     @Override
-    public Meal save(Meal Meal, int userId) {
+    public Meal save(Meal meal, int userId) {
         return null;
     }
 
