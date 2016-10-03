@@ -43,7 +43,7 @@
             <th></th>
         </tr>
         </thead>
-        <c:forEach items="${mealList}" var="meal">
+        <c:forEach items="${meals}" var="meal">
             <jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>
             <tr class="${meal.exceed ? 'exceeded' : 'normal'}">
                 <td>
