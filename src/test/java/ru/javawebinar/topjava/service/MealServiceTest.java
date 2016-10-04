@@ -42,12 +42,6 @@ public class MealServiceTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private static void logInfo(Description description, String status, long nanos) {
-        String testName = description.getMethodName();
-        LOG.info(String.format("Test %s %s, spent %d microseconds",
-                testName, status, TimeUnit.NANOSECONDS.toMicros(nanos)));
-    }
-
     @Rule
     public Stopwatch stopwatch = new Stopwatch() {
         @Override
@@ -68,6 +62,12 @@ public class MealServiceTest {
         @Override
         protected void finished(long nanos, Description description) {
             logInfo(description, "finished", nanos);
+        }
+
+        private void logInfo(Description description, String status, long nanos) {
+            String testName = description.getMethodName();
+            LOG.info(String.format("Test %s %s, spent %d microseconds",
+                    testName, status, TimeUnit.NANOSECONDS.toMicros(nanos)));
         }
     };
 
