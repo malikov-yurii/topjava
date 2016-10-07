@@ -32,27 +32,27 @@ public class JdbcMealRepositoryImpl implements MealRepository {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private SimpleJdbcInsert insertUserMeal;
+    private SimpleJdbcInsert insertMeal;
 
     @Autowired
     public JdbcMealRepositoryImpl(DataSource dataSource) {
-        this.insertUserMeal = new SimpleJdbcInsert(dataSource)
+        this.insertMeal = new SimpleJdbcInsert(dataSource)
                 .withTableName("meals")
                 .usingGeneratedKeyColumns("id");
     }
 
     @Override
-    public Meal save(Meal userMeal, int userId) {
+    public Meal save(Meal meal, int userId) {
         MapSqlParameterSource map = new MapSqlParameterSource()
-                .addValue("id", userMeal.getId())
-                .addValue("description", userMeal.getDescription())
-                .addValue("calories", userMeal.getCalories())
-                .addValue("date_time", userMeal.getDateTime())
+                .addValue("id", meal.getId())
+                .addValue("description", meal.getDescription())
+                .addValue("calories", meal.getCalories())
+                .addValue("date_time", meal.getDateTime())
                 .addValue("user_id", userId);
 
-        if (userMeal.isNew()) {
-            Number newId = insertUserMeal.executeAndReturnKey(map);
-            userMeal.setId(newId.intValue());
+        if (meal.isNew()) {
+            Number newId = insertMeal.executeAndReturnKey(map);
+            meal.setId(newId.intValue());
         } else {
             if (namedParameterJdbcTemplate.update("" +
                             "UPDATE meals " +
@@ -62,7 +62,7 @@ public class JdbcMealRepositoryImpl implements MealRepository {
                 return null;
             }
         }
-        return userMeal;
+        return meal;
     }
 
     @Override
