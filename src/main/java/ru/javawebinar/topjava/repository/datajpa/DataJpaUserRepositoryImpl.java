@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
@@ -15,7 +14,6 @@ import java.util.List;
 
 @Repository
 public class DataJpaUserRepositoryImpl implements UserRepository {
-    private static final Sort SORT_NAME_EMAIL = new Sort("name", "email");
 
     @Autowired
     private CrudUserRepository crudRepository;
@@ -42,6 +40,6 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
 
     @Override
     public List<User> getAll() {
-        return crudRepository.findAll(SORT_NAME_EMAIL);
+        return crudRepository.findAll();
     }
 }
