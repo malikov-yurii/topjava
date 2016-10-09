@@ -19,8 +19,8 @@ import java.util.List;
 public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Transactional
     @Modifying
-    @Query("DELETE FROM Meal m WHERE m.id=:id AND m.user.id=userId")
-    int delete(int id);
+    @Query("DELETE FROM Meal m WHERE m.id=:id AND m.user.id=:userId")
+    int delete(@Param("id") int id, @Param("userId") int userId);
 
     @Transactional
     @Override
@@ -29,10 +29,10 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Override
     Meal findOne(Integer id);
 
-    @Query("SELECT m FROM Meal m WHERE m.user.userId=:userId ORDER BY m.dateTime")
+    @Query("SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC")
     List<Meal> findAll(@Param("userId") int userId);
 
 
-    @Query("SELECT m FROM Meal m WHERE m.user.userId=:userId AND m.dateTime BETWEEN :startDate AND :endDate ORDER BY m.dateTime DESC")
+    @Query("SELECT m FROM Meal m WHERE m.user.id=:userId AND m.dateTime BETWEEN :startDate AND :endDate ORDER BY m.dateTime DESC")
     List<Meal> getBetween(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate, @Param("userId") int userId);
 }
