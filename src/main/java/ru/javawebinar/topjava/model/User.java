@@ -7,9 +7,11 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.persistence.criteria.Fetch;
 import javax.validation.constraints.Digits;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -54,6 +56,18 @@ public class User extends NamedEntity {
     @Column(name = "calories_per_day", columnDefinition = "default 2000")
     @Digits(fraction = 0, integer = 4)
     private int caloriesPerDay = MealsUtil.DEFAULT_CALORIES_PER_DAY;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
+    List<Meal> meals;
+
+    public List<Meal> getMeals() {
+        return meals;
+    }
+
+    public void setMeals(List<Meal> meals) {
+        this.meals = meals;
+    }
 
     public User() {
     }

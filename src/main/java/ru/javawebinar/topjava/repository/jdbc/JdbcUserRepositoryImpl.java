@@ -20,23 +20,28 @@ import java.util.List;
  */
 
 @Repository
-public class JdbcUserRepositoryImpl implements UserRepository {
+public abstract class JdbcUserRepositoryImpl implements UserRepository {
 
     private static final BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    protected JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    protected NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private SimpleJdbcInsert insertUser;
+    protected SimpleJdbcInsert insertUser;
 
     @Autowired
     public JdbcUserRepositoryImpl(DataSource dataSource) {
         this.insertUser = new SimpleJdbcInsert(dataSource)
                 .withTableName("USERS")
                 .usingGeneratedKeyColumns("id");
+    }
+
+    @Override
+    public User getUserWithAllMeals(int id) {
+        return null;
     }
 
     @Override

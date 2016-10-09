@@ -22,6 +22,11 @@ public class MealServiceImpl implements MealService {
     private MealRepository repository;
 
     @Override
+    public Meal getMealWithUser(int id, int userId) {
+        return ExceptionUtil.checkNotFoundWithId(repository.getMealWithUser(id, userId), id);
+    }
+
+    @Override
     public Meal get(int id, int userId) {
         return ExceptionUtil.checkNotFoundWithId(repository.get(id, userId), id);
     }

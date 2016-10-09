@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.repository.datajpa;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
@@ -16,30 +17,41 @@ import java.util.List;
 public class DataJpaUserRepositoryImpl implements UserRepository {
 
     @Autowired
-    private CrudUserRepository crudRepository;
+    private CrudUserRepository crudUserRepository;
+
+    @Autowired
+    private CrudMealRepository crudMealRepository;
+
+    @Override
+//    @Transactional(readOnly = true)
+    public User getUserWithAllMeals(int id) {
+        User user = get(id);
+        user.setMeals(crudMealRepository.findAll(id));
+        return user;
+    }
 
     @Override
     public User save(User user) {
-        return crudRepository.save(user);
+        return crudUserRepository.save(user);
     }
 
     @Override
     public boolean delete(int id) {
-        return crudRepository.delete(id) != 0;
+        return crudUserRepository.delete(id) != 0;
     }
 
     @Override
     public User get(int id) {
-        return crudRepository.findOne(id);
+        return crudUserRepository.findOne(id);
     }
 
     @Override
     public User getByEmail(String email) {
-        return crudRepository.getByEmail(email);
+        return crudUserRepository.getByEmail(email);
     }
 
     @Override
     public List<User> getAll() {
-        return crudRepository.findAll();
+        return crudUserRepository.findAll();
     }
 }

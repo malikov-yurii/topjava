@@ -25,6 +25,11 @@ public class JpaMealRepositoryImpl implements MealRepository {
     private EntityManager em;
 
     @Override
+    public Meal getMealWithUser(int id, int userId) {
+        return null;
+    }
+
+    @Override
     @Transactional
     public Meal save(Meal meal, int userId) {
         if (!meal.isNew() && get(meal.getId(), userId) == null) {

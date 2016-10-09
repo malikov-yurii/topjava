@@ -12,6 +12,8 @@ import java.util.List;
  */
 public interface UserService {
 
+    User getUserWithAllMeals(int id) throws NotFoundException;
+
     User save(User user);
 
     void delete(int id) throws NotFoundException;

@@ -13,7 +13,11 @@ import java.util.Collection;
  * 15.06.2015.
  */
 public interface MealService {
+
+    Meal getMealWithUser(int id, int userId) throws NotFoundException;
+
     Meal get(int id, int userId) throws NotFoundException;
+
 
     void delete(int id, int userId) throws NotFoundException;
 

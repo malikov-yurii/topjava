@@ -31,6 +31,11 @@ public class JpaUserRepositoryImpl implements UserRepository {
     private EntityManager em;
 
     @Override
+    public User getUserWithAllMeals(int id) {
+        return null;
+    }
+
+    @Override
     @Transactional
     public User save(User user) {
         if (user.isNew()) {
