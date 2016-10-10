@@ -27,6 +27,8 @@ public class UserTestData {
                             && Objects.equals(expected.getEmail(), actual.getEmail())
                             && Objects.equals(expected.getCaloriesPerDay(), actual.getCaloriesPerDay())
                             && Objects.equals(expected.isEnabled(), actual.isEnabled())
+                            && (((expected.getMeals() != null) && (actual.getMeals() !=null)) ?
+                            Objects.equals(expected.getMeals(), actual.getMeals()) : true)
 //                            && Objects.equals(expected.getRoles(), actual.getRoles())
                     )
     );

@@ -57,8 +57,9 @@ public class User extends NamedEntity {
     @Digits(fraction = 0, integer = 4)
     private int caloriesPerDay = MealsUtil.DEFAULT_CALORIES_PER_DAY;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "id")
     List<Meal> meals;
 
     public List<Meal> getMeals() {
