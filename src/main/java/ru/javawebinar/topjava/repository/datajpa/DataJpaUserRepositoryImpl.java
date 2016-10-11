@@ -23,9 +23,10 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
     private CrudMealRepository crudMealRepository;
 
     @Override
-//    @Transactional(readOnly = true)
     public User getUserWithAllMeals(int id) {
         User user = get(id);
+        if  (user == null)
+            return null;
         user.setMeals(crudMealRepository.findAll(id));
         return user;
     }

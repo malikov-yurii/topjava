@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface UserService {
 
-    User getUserWithAllMeals(int id) throws NotFoundException;
+    User getWithAllMeals(int id) throws NotFoundException;
 
     User save(User user);
 

@@ -14,7 +14,7 @@ import java.util.Collection;
  */
 public interface MealService {
 
-    Meal getMealWithUser(int id, int userId) throws NotFoundException;
+    Meal getWithUser(int id, int userId) throws NotFoundException;
 
     Meal get(int id, int userId) throws NotFoundException;
 

@@ -35,7 +35,7 @@ public class MealServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) throws ServletException {
-        System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, Profiles.POSTGRES + ", " + Profiles.DATAJPA);
+        System.setProperty(AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME, Profiles.POSTGRES + ", " + Profiles.DATAJPA);
         super.init(config);
 
         springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");

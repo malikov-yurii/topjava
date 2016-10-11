@@ -23,7 +23,7 @@ public class DataJpaUserServiceTest extends UserServiceTest{
 
     @Test
     public void testGetUserWithAllMeals() throws Exception {
-        User userActual = userService.getUserWithAllMeals(USER_ID);
+        User userActual = service.getWithAllMeals(USER_ID);
         User userExpected = new User(USER);
         userExpected.setMeals((List<Meal>)(mealService.getAll(USER_ID)));
         MATCHER.assertEquals(userExpected, userActual);

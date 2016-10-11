@@ -44,24 +44,32 @@ public abstract class JdbcUserRepositoryImpl implements UserRepository {
         return null;
     }
 
+//  ? Maybe I should declare this method as abstract and implement it in PostgresJdbcUserRepositoryImpl  ?
+//  @Override
+//  public abstract User save(User user);
     @Override
     public User save(User user) {
-        MapSqlParameterSource map = new MapSqlParameterSource()
+        return save(user, getSqlParameterSourceMapWithoutRegistered(user).addValue("registered", user.getRegistered()));
+    }
+
+    public MapSqlParameterSource getSqlParameterSourceMapWithoutRegistered(User user) {
+        return new MapSqlParameterSource()
                 .addValue("id", user.getId())
                 .addValue("name", user.getName())
                 .addValue("email", user.getEmail())
                 .addValue("password", user.getPassword())
-                .addValue("registered", user.getRegistered())
                 .addValue("enabled", user.isEnabled())
                 .addValue("caloriesPerDay", user.getCaloriesPerDay());
+    }
 
+    public User save(User user, MapSqlParameterSource mapSqlParameterSource) {
         if (user.isNew()) {
-            Number newKey = insertUser.executeAndReturnKey(map);
+            Number newKey = insertUser.executeAndReturnKey(mapSqlParameterSource);
             user.setId(newKey.intValue());
         } else {
             namedParameterJdbcTemplate.update(
                     "UPDATE users SET name=:name, email=:email, password=:password, " +
-                            "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", map);
+                            "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", mapSqlParameterSource);
         }
         return user;
     }
