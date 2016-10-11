@@ -22,7 +22,7 @@ public interface UserRepository {
 
     List<User> getAll();
 
-    default User getUserWithAllMeals(int id){
+    default User getWithAllMeals(int id){
         throw new UnsupportedOperationException("This method hasn't been implemented.");
     }
 }

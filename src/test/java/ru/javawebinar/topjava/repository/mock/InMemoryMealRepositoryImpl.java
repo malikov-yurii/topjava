@@ -28,7 +28,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     private AtomicInteger counter = new AtomicInteger(0);
 
     @Override
-    public Meal getMealWithUser(int id, int userId) {
+    public Meal getWithUser(int id, int userId) {
         return null;
     }
 

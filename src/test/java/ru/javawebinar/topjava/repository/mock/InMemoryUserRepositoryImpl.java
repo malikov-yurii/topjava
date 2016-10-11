@@ -38,7 +38,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User getUserWithAllMeals(int id) {
+    public User getWithAllMeals(int id) {
         return null;
     }
 

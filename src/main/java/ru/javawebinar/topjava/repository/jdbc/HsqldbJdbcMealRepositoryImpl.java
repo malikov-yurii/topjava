@@ -19,8 +19,8 @@ public class HsqldbJdbcMealRepositoryImpl extends JdbcMealRepositoryImpl {
     }
 
     @Override
-    public Meal save(Meal meal, int userId) {
-        return save(meal, getSqlParameterSourceMapWithoutDateTime(meal, userId).addValue("date_time", Timestamp.valueOf(meal.getDateTime())));
+    public Timestamp getDateTime(Meal meal) {
+        return Timestamp.valueOf(meal.getDateTime());
     }
 
     @Override

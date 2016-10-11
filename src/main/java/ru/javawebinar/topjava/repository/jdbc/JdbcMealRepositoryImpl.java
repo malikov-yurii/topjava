@@ -42,41 +42,30 @@ public abstract class JdbcMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Meal getMealWithUser(int id, int userId) {
-        return null;
-    }
-
-//  ? Maybe I should declare this method as abstract and implement it in PostgresJdbcMealRepositoryImpl  ?
-//  @Override
-//  public abstract Meal save(Meal meal, int userId);
-    @Override
     public Meal save(Meal meal, int userId) {
-        return save(meal, getSqlParameterSourceMapWithoutDateTime(meal, userId).addValue("date_time", meal.getDateTime()));
-    }
-
-    public MapSqlParameterSource getSqlParameterSourceMapWithoutDateTime(Meal meal, int userId) {
-        return new MapSqlParameterSource()
+        MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", meal.getId())
                 .addValue("description", meal.getDescription())
                 .addValue("calories", meal.getCalories())
+                .addValue("date_time", getDateTime(meal))
                 .addValue("user_id", userId);
-    }
 
-    public Meal save(Meal meal, MapSqlParameterSource mapSqlParameterSource) {
         if (meal.isNew()) {
-            Number newId = insertMeal.executeAndReturnKey(mapSqlParameterSource);
+            Number newId = insertMeal.executeAndReturnKey(map);
             meal.setId(newId.intValue());
         } else {
             if (namedParameterJdbcTemplate.update("" +
                             "UPDATE meals " +
                             "   SET description=:description, calories=:calories, date_time=:date_time " +
                             " WHERE id=:id AND user_id=:user_id"
-                    , mapSqlParameterSource) == 0) {
+                    , map) == 0) {
                 return null;
             }
         }
         return meal;
     }
+
+    public abstract <T> T getDateTime(Meal meal);
 
     @Override
     public boolean delete(int id, int userId) {

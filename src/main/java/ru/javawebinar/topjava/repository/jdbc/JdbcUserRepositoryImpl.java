@@ -20,7 +20,7 @@ import java.util.List;
  */
 
 @Repository
-public abstract class JdbcUserRepositoryImpl implements UserRepository {
+public class JdbcUserRepositoryImpl implements UserRepository {
 
     private static final BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
 
@@ -40,36 +40,23 @@ public abstract class JdbcUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User getUserWithAllMeals(int id) {
-        return null;
-    }
-
-//  ? Maybe I should declare this method as abstract and implement it in PostgresJdbcUserRepositoryImpl  ?
-//  @Override
-//  public abstract User save(User user);
-    @Override
     public User save(User user) {
-        return save(user, getSqlParameterSourceMapWithoutRegistered(user).addValue("registered", user.getRegistered()));
-    }
-
-    public MapSqlParameterSource getSqlParameterSourceMapWithoutRegistered(User user) {
-        return new MapSqlParameterSource()
+        MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", user.getId())
                 .addValue("name", user.getName())
                 .addValue("email", user.getEmail())
                 .addValue("password", user.getPassword())
+                .addValue("registered", user.getRegistered())
                 .addValue("enabled", user.isEnabled())
                 .addValue("caloriesPerDay", user.getCaloriesPerDay());
-    }
 
-    public User save(User user, MapSqlParameterSource mapSqlParameterSource) {
         if (user.isNew()) {
-            Number newKey = insertUser.executeAndReturnKey(mapSqlParameterSource);
+            Number newKey = insertUser.executeAndReturnKey(map);
             user.setId(newKey.intValue());
         } else {
             namedParameterJdbcTemplate.update(
                     "UPDATE users SET name=:name, email=:email, password=:password, " +
-                            "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", mapSqlParameterSource);
+                            "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", map);
         }
         return user;
     }

@@ -40,7 +40,8 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Meal getMealWithUser(int id, int userId) {
+    @Transactional
+    public Meal getWithUser(int id, int userId) {
         Meal meal = get(id, userId);
         if (meal == null)
             return null;

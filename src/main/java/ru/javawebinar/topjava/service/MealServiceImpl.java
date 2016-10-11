@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import ru.javawebinar.topjava.model.Meal;
@@ -23,7 +22,7 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public Meal getWithUser(int id, int userId) {
-        return ExceptionUtil.checkNotFoundWithId(repository.getMealWithUser(id, userId), id);
+        return ExceptionUtil.checkNotFoundWithId(repository.getWithUser(id, userId), id);
     }
 
     @Override
