@@ -13,14 +13,14 @@ import java.util.List;
 
 @Repository
 @Profile(Profiles.HSQLDB)
-public class HsqldbJdbcMealRepositoryImpl extends JdbcMealRepositoryImpl {
+public class HsqldbJdbcMealRepositoryImpl extends JdbcMealRepositoryImpl<Timestamp>{
     public HsqldbJdbcMealRepositoryImpl(DataSource dataSource) {
         super(dataSource);
     }
 
     @Override
-    public Timestamp getDateTime(Meal meal) {
-        return Timestamp.valueOf(meal.getDateTime());
+    public Timestamp getProperDateTime(LocalDateTime localDateTime) {
+        return Timestamp.valueOf(localDateTime);
     }
 
     @Override
@@ -36,12 +36,5 @@ public class HsqldbJdbcMealRepositoryImpl extends JdbcMealRepositoryImpl {
     @Override
     public List<Meal> getAll(int userId) {
         return super.getAll(userId);
-    }
-
-    @Override
-    public List<Meal> getBetween(LocalDateTime startDate, LocalDateTime endDate, int userId) {
-        return jdbcTemplate.query(
-                "SELECT * FROM meals WHERE user_id=?  AND date_time BETWEEN  ? AND ? ORDER BY date_time DESC",
-                ROW_MAPPER, userId, Timestamp.valueOf(startDate), Timestamp.valueOf(endDate));
     }
 }

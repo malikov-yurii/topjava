@@ -37,11 +37,6 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
         return user;
     }
 
-    @Override
-    public User getWithAllMeals(int id) {
-        return null;
-    }
-
     @PostConstruct
     public void postConstruct() {
         LOG.info("+++ PostConstruct");
