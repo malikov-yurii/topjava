@@ -22,19 +22,4 @@ public class HsqldbJdbcMealRepositoryImpl extends JdbcMealRepositoryImpl<Timesta
     public Timestamp getProperDateTime(LocalDateTime localDateTime) {
         return Timestamp.valueOf(localDateTime);
     }
-
-    @Override
-    public boolean delete(int id, int userId) {
-        return super.delete(id, userId);
-    }
-
-    @Override
-    public Meal get(int id, int userId) {
-        return super.get(id, userId);
-    }
-
-    @Override
-    public List<Meal> getAll(int userId) {
-        return super.getAll(userId);
-    }
 }
