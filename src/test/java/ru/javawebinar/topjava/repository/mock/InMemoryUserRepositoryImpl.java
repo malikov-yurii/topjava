@@ -26,7 +26,7 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     private Map<Integer, User> repository = new ConcurrentHashMap<>();
     private AtomicInteger counter = new AtomicInteger(0);
 
-    private static final Comparator<User> USER_COMPARATOR = Comparator.comparing(User::getName);
+    private static final Comparator<User> USER_COMPARATOR = Comparator.comparing(User::getName).thenComparing(User::getEmail);
 
     @Override
     public User save(User user) {
