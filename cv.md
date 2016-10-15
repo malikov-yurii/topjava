@@ -52,9 +52,9 @@
 ### Позиционирование <a href="https://github.com/JavaOPs/topjava/blob/master/description.md">проекта Topjava</a>:
 -  После завершения проекта вы освоите все заявленные в нем технологии - вставьте их в квалификацию (включая java 8 Stream and Time API). В разделе опыт работы (если у вас нет коммерческого опыта) вставьте:
 
-        Участие в разработке Spring/JPA Enterprise приложения c авторизацией и правами доступа на основе ролей 
-                на стеке Maven/ Spring MVC/ Security/ REST(Jackson)/ Java 8 Stream API:
-        -  реализация сохранения в базы Postgres и HSQLDB на основе Spring JBDC, JPA(Hibernate) и Spring-Data-JPA
+        Участие в разработке spring/JPA Enterprise приложения c авторизацией и правами доступа на основе ролей
+                на стеке Maven/ spring MVC/ Security/ REST(Jackson)/ Java 8 Stream API:
+        -  реализация сохранения в базы Postgres и HSQLDB на основе spring JBDC, JPA(Hibernate) и spring-Data-JPA
         -  реализация и тестирование REST и AJAX контроллеров
         -  реализация клиента на Bootstrap (css/js), datatables, jQuery + plugins.
         -  отлично будет, если вы его еще как то сами доработаете

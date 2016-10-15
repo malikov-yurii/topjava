@@ -148,7 +148,7 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Spring -->
+        <!-- spring -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>

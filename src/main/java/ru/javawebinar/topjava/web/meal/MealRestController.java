@@ -25,7 +25,6 @@ public class MealRestController {
     private static final Logger LOG = LoggerFactory.getLogger(MealRestController.class);
 
     @Autowired
-    @Qualifier("mealServiceImpl")
     private MealService service;
 
     public Meal get(int id) {
