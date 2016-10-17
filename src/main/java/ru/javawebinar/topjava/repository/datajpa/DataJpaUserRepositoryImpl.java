@@ -5,7 +5,12 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
+import javax.persistence.EntityGraph;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * GKislin
@@ -17,6 +22,9 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
 
     @Autowired
     private CrudUserRepository crudRepository;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public User save(User user) {
@@ -30,7 +38,13 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
 
     @Override
     public User get(int id) {
-        return crudRepository.findOne(id);
+        EntityGraph graph = this.em.getEntityGraph("graph.User.roles");
+
+        Map hints = new HashMap();
+        hints.put("javax.persistence.fetchgraph", graph);
+
+        return this.em.find(User.class, id, hints);
+//        return crudRepository.findOne(id);
     }
 
     @Override

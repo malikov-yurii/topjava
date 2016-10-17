@@ -6,9 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: gkislin
@@ -43,7 +46,13 @@ public class JpaUserRepositoryImpl implements UserRepository {
 
     @Override
     public User get(int id) {
-        return em.find(User.class, id);
+        EntityGraph graph = this.em.getEntityGraph("graph.User.roles");
+
+        Map hints = new HashMap();
+        hints.put("javax.persistence.fetchgraph", graph);
+
+        return this.em.find(User.class, id, hints);
+//        return em.find(User.class, id);
     }
 
     @Override

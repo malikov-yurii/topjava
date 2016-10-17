@@ -18,6 +18,8 @@ import java.util.Set;
  * User: gkislin
  * Date: 22.08.2014
  */
+@NamedEntityGraph(name = "graph.User.roles",
+        attributeNodes = @NamedAttributeNode("roles"))
 @NamedQueries({
         @NamedQuery(name = User.DELETE, query = "DELETE FROM User u WHERE u.id=:id"),
         @NamedQuery(name = User.BY_EMAIL, query = "SELECT u FROM User u LEFT JOIN FETCH u.roles WHERE u.email=?1"),

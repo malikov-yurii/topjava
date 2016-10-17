@@ -51,7 +51,6 @@ public class RootController {
                     LocalDateTime.parse(request.getParameter("dateTime")),
                     request.getParameter("description"),
                     Integer.valueOf(request.getParameter("calories")));
-
             if (request.getParameter("id").isEmpty()) {
                 LOG.info("Create {}", meal);
                 mealController.create(meal);
