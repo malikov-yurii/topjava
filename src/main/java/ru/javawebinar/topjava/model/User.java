@@ -144,4 +144,8 @@ public class User extends NamedEntity {
                 ", caloriesPerDay=" + caloriesPerDay +
                 ')';
     }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }

@@ -39,12 +39,9 @@ public class DataJpaUserRepositoryImpl implements UserRepository {
     @Override
     public User get(int id) {
         EntityGraph graph = this.em.getEntityGraph("graph.User.roles");
-
         Map hints = new HashMap();
         hints.put("javax.persistence.fetchgraph", graph);
-
         return this.em.find(User.class, id, hints);
-//        return crudRepository.findOne(id);
     }
 
     @Override
