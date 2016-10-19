@@ -38,3 +38,7 @@ header, footer {
     padding: 5px 20px;
     margin: 6px 0;
 }
+
+.table td:first-child {
+    white-space: nowrap;
+}
