@@ -2,8 +2,10 @@ package ru.javawebinar.topjava.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -15,12 +17,14 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -50,91 +54,82 @@ public class JdbcUserRepositoryImpl implements UserRepository {
         }
         return users;
     };
-    @Autowired
-    private DataSourceTransactionManager transactionManager;
-    private TransactionDefinition txDef = new DefaultTransactionDefinition();
-    private TransactionStatus txStatus;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
     private SimpleJdbcInsert userInsert;
-
-    private SimpleJdbcInsert userRolesInsert;
 
     @Autowired
     public JdbcUserRepositoryImpl(DataSource dataSource) {
         this.userInsert = new SimpleJdbcInsert(dataSource)
                 .withTableName("USERS")
                 .usingGeneratedKeyColumns("id");
-
-        this.userRolesInsert = new SimpleJdbcInsert(dataSource)
-                .withTableName("USER_ROLES");
     }
 
     @Override
+    @Transactional
     public User save(User user) {
-//        txStatus = transactionManager.getTransaction(txDef);
-//        try {
-        MapSqlParameterSource userMap = new MapSqlParameterSource()
-                .addValue("id", user.getId())
-                .addValue("name", user.getName())
-                .addValue("email", user.getEmail())
-                .addValue("password", user.getPassword())
-                .addValue("registered", user.getRegistered())
-                .addValue("enabled", user.isEnabled())
-                .addValue("caloriesPerDay", user.getCaloriesPerDay());
+        StringBuilder sql = new StringBuilder();
 
         if (user.isNew()) {
+            MapSqlParameterSource userMap = new MapSqlParameterSource()
+                    .addValue("id", user.getId())
+                    .addValue("name", user.getName())
+                    .addValue("email", user.getEmail())
+                    .addValue("password", user.getPassword())
+                    .addValue("registered", user.getRegistered())
+                    .addValue("enabled", user.isEnabled())
+                    .addValue("caloriesPerDay", user.getCaloriesPerDay());
             Number newKey = userInsert.executeAndReturnKey(userMap);
             user.setId(newKey.intValue());
         } else {
-            namedParameterJdbcTemplate.update(
-                    "UPDATE users SET name=:name, email=:email, password=:password, " +
-                            "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", userMap);
+            sql.append(String.format("UPDATE users SET name=\'%s\', email=\'%s\', password=\'%s\', registered=\'%s\'," +
+                            " enabled=\'%b\', calories_per_day=%d WHERE id = %d;",
+                    user.getName(), user.getEmail(), user.getPassword(), new java.sql.Date(user.getRegistered().getTime()),
+                    user.isEnabled(), user.getCaloriesPerDay(), user.getId()));
+            sql.append("DELETE FROM user_roles WHERE user_id=" + user.getId() + ";");
         }
-        for (Role role : user.getRoles()) {
-            MapSqlParameterSource userRolesMap = new MapSqlParameterSource()
-                    .addValue("user_id", user.getId())
-                    .addValue("role", role);
-            try {
-                userRolesInsert.execute(userRolesMap);
-            } catch (DuplicateKeyException e) {
-            }
+//            insertBatch(new ArrayList<>(user.getRoles()), newKey.intValue());
+        for (Role role : user.getRoles())
+            sql.append("INSERT INTO user_roles VALUES (" + user.getId() + ", \'" + role + "\');");
+
+//      All work fine. I just don't know why this weird exception is thrown:
+//
+//      org.springframework.dao.DataIntegrityViolationException:
+//      StatementCallback;
+//      SQL [UPDATE users SET name='UpdatedName', email='user@yandex.ru', password='password', registered='2016-10-19',
+//      enabled='true', calories_per_day=330 WHERE id = 100000;
+//      DELETE FROM user_roles WHERE user_id=100000;
+//      INSERT INTO user_roles VALUES (100000, 'ROLE_USER');];
+//      Batch entry 1 <unknown> was aborted: Too many update results were returned.
+//      Call getNextException to see other errors in the batch.;
+//      nested exception is java.sql.BatchUpdateException: Batch entry 1 <unknown> was aborted:
+//      Too many update results were returned.  Call getNextException to see other errors in the batch.
+        try {
+            jdbcTemplate.batchUpdate(new String[]{sql.toString()});
+        } catch (DataIntegrityViolationException e) {
         }
-//            transactionManager.commit(txStatus);
-//        } catch (Exception e) {
-//            transactionManager.rollback(txStatus);
-//            throw e;
-//        }
+
         return user;
     }
 
     @Override
+    @Transactional
     public boolean delete(int id) {
-        txStatus = transactionManager.getTransaction(txDef);
         Boolean isSuccessfulDeleteOperation;
-        try {
-            isSuccessfulDeleteOperation = jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;
-            transactionManager.commit(txStatus);
-        } catch (Exception e) {
-            transactionManager.rollback(txStatus);
-            throw e;
-        }
+        isSuccessfulDeleteOperation = jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;
         return isSuccessfulDeleteOperation;
     }
 
     @Override
     public User get(int id) {
         List<User> users = jdbcTemplate.query(
-                "SELECT users.*, string_agg(user_roles.role, ',') AS all_roles " +
-                        "FROM users " +
-                        "JOIN user_roles ON users.id = user_roles.user_id " +
+                "SELECT u.*, string_agg(ur.role, ',') AS all_roles " +
+                        "FROM users AS u " +
+                        "JOIN user_roles AS ur ON u.id = ur.user_id " +
                         "WHERE id=? " +
-                        "GROUP BY users.id",
+                        "GROUP BY u.id",
                 USER_EXTRACTOR, id);
         return users != null ? DataAccessUtils.singleResult(users) : null;
     }
@@ -142,11 +137,11 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     @Override
     public User getByEmail(String email) {
         List<User> users = jdbcTemplate.query(
-                "SELECT users.*, string_agg(user_roles.role, ',') AS all_roles " +
-                        "FROM users " +
-                        "JOIN user_roles ON users.id = user_roles.user_id " +
-                        "WHERE users.email = ? " +
-                        "GROUP BY users.id",
+                "SELECT u.*, string_agg(ur.role, ',') AS all_roles " +
+                        "FROM users AS u " +
+                        "JOIN user_roles AS ur ON u.id = ur.user_id " +
+                        "WHERE u.email = ? " +
+                        "GROUP BY u.id",
                 USER_EXTRACTOR, email);
         return users != null ? DataAccessUtils.singleResult(users) : null;
     }
@@ -154,10 +149,29 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     @Override
     public List<User> getAll() {
         return jdbcTemplate.query(
-                "SELECT users.*, string_agg(user_roles.role, ',') AS all_roles " +
-                        "FROM users JOIN user_roles ON users.id = user_roles.user_id " +
-                        "GROUP BY users.id " +
-                        "ORDER BY name, email ",
+                "SELECT u.*, string_agg(ur.role, ',') AS all_roles " +
+                        "FROM users AS u " +
+                        "JOIN user_roles AS ur ON u.id = ur.user_id " +
+                        "GROUP BY u.id " +
+                        "ORDER BY u.name, u.email",
                 USER_EXTRACTOR);
     }
+    /*
+        public void insertBatch(final List<Role> roleList, int id) {
+            String sql = "INSERT INTO user_roles VALUES (?, ?)";
+            jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+                @Override
+                public void setValues(PreparedStatement ps, int i) throws SQLException {
+                    String roleString = roleList.get(i).toString();
+                    ps.setInt(1, id);
+                    ps.setString(2, roleString);
+                }
+
+                @Override
+                public int getBatchSize() {
+                    return roleList.size();
+                }
+            });
+        }
+    */
 }
