@@ -8,17 +8,16 @@
 <jsp:include page="fragments/bodyHeader.jsp"/>
 
 <section>
-    <h2><a href="${pageContext.request.contextPath}/"><fmt:message key="app.home"/></a></h2>
     <h3><fmt:message key="users.title"/></h3>
 
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
         <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Roles</th>
-            <th>Active</th>
-            <th>Registered</th>
+            <th><fmt:message key="users.name"/></th>
+            <th><fmt:message key="users.email"/></th>
+            <th><fmt:message key="users.roles"/></th>
+            <th><fmt:message key="users.active"/></th>
+            <th><fmt:message key="users.registered"/></th>
         </tr>
         </thead>
         <c:forEach items="${users}" var="user">
