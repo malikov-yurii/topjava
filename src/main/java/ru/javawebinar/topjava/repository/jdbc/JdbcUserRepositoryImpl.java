@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
@@ -59,67 +60,69 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     private JdbcTemplate jdbcTemplate;
 
     private SimpleJdbcInsert userInsert;
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private SimpleJdbcInsert userRoleInsert;
 
     @Autowired
     public JdbcUserRepositoryImpl(DataSource dataSource) {
         this.userInsert = new SimpleJdbcInsert(dataSource)
                 .withTableName("USERS")
                 .usingGeneratedKeyColumns("id");
+        this.userRoleInsert = new SimpleJdbcInsert(dataSource)
+                .withTableName("USER_ROLES");
     }
 
     @Override
     @Transactional
     public User save(User user) {
-        StringBuilder sql = new StringBuilder();
-
+        MapSqlParameterSource userMap = new MapSqlParameterSource()
+                .addValue("id", user.getId())
+                .addValue("name", user.getName())
+                .addValue("email", user.getEmail())
+                .addValue("password", user.getPassword())
+                .addValue("registered", user.getRegistered())
+                .addValue("enabled", user.isEnabled())
+                .addValue("caloriesPerDay", user.getCaloriesPerDay());
         if (user.isNew()) {
-            MapSqlParameterSource userMap = new MapSqlParameterSource()
-                    .addValue("id", user.getId())
-                    .addValue("name", user.getName())
-                    .addValue("email", user.getEmail())
-                    .addValue("password", user.getPassword())
-                    .addValue("registered", user.getRegistered())
-                    .addValue("enabled", user.isEnabled())
-                    .addValue("caloriesPerDay", user.getCaloriesPerDay());
             Number newKey = userInsert.executeAndReturnKey(userMap);
             user.setId(newKey.intValue());
+            insertRoles(user);
         } else {
-            sql.append(String.format("UPDATE users SET name=\'%s\', email=\'%s\', password=\'%s\', registered=\'%s\'," +
-                            " enabled=\'%b\', calories_per_day=%d WHERE id = %d;",
-                    user.getName(), user.getEmail(), user.getPassword(), new java.sql.Date(user.getRegistered().getTime()),
-                    user.isEnabled(), user.getCaloriesPerDay(), user.getId()));
-            sql.append("DELETE FROM user_roles WHERE user_id=" + user.getId() + ";");
+            deleteRoles(user);
+            insertRoles(user);
+            namedParameterJdbcTemplate.update(
+                    "UPDATE users SET name=:name, email=:email, password=:password, " +
+                            "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", userMap);
         }
-//            insertBatch(new ArrayList<>(user.getRoles()), newKey.intValue());
-        for (Role role : user.getRoles())
-            sql.append("INSERT INTO user_roles VALUES (" + user.getId() + ", \'" + role + "\');");
-
-//      All work fine. I just don't know why this weird exception is thrown:
-//
-//      org.springframework.dao.DataIntegrityViolationException:
-//      StatementCallback;
-//      SQL [UPDATE users SET name='UpdatedName', email='user@yandex.ru', password='password', registered='2016-10-19',
-//      enabled='true', calories_per_day=330 WHERE id = 100000;
-//      DELETE FROM user_roles WHERE user_id=100000;
-//      INSERT INTO user_roles VALUES (100000, 'ROLE_USER');];
-//      Batch entry 1 <unknown> was aborted: Too many update results were returned.
-//      Call getNextException to see other errors in the batch.;
-//      nested exception is java.sql.BatchUpdateException: Batch entry 1 <unknown> was aborted:
-//      Too many update results were returned.  Call getNextException to see other errors in the batch.
-        try {
-            jdbcTemplate.batchUpdate(new String[]{sql.toString()});
-        } catch (DataIntegrityViolationException e) {
-        }
-
         return user;
+    }
+
+    public void insertRoles(User u){
+        Set<Role> roles = u.getRoles();
+        Iterator<Role> iterator = roles.iterator();
+        jdbcTemplate.batchUpdate("INSERT INTO user_roles (user_id, role) VALUES (?, ?)", new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setInt(1, u.getId());
+                ps.setString(2, iterator.next().name());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return roles.size();
+            }
+        });
+    }
+
+    public void deleteRoles(User u){
+        jdbcTemplate.update("DELETE FROM user_roles WHERE user_id = ?", u.getId());
     }
 
     @Override
     @Transactional
     public boolean delete(int id) {
-        Boolean isSuccessfulDeleteOperation;
-        isSuccessfulDeleteOperation = jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;
-        return isSuccessfulDeleteOperation;
+        return jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;
     }
 
     @Override
@@ -156,22 +159,4 @@ public class JdbcUserRepositoryImpl implements UserRepository {
                         "ORDER BY u.name, u.email",
                 USER_EXTRACTOR);
     }
-    /*
-        public void insertBatch(final List<Role> roleList, int id) {
-            String sql = "INSERT INTO user_roles VALUES (?, ?)";
-            jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
-                @Override
-                public void setValues(PreparedStatement ps, int i) throws SQLException {
-                    String roleString = roleList.get(i).toString();
-                    ps.setInt(1, id);
-                    ps.setString(2, roleString);
-                }
-
-                @Override
-                public int getBatchSize() {
-                    return roleList.size();
-                }
-            });
-        }
-    */
 }

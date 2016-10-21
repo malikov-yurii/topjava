@@ -18,7 +18,7 @@
         <jdbc:script encoding="utf-8" location="classpath:db/populateDB.sql"/>
     </jdbc:initialize-database>
 
-
+    <tx:annotation-driven/>
 
     <!-- Choose profile from (hsqldb, postgres) and (jdbc,datajpa,jpa) -->
 
@@ -60,8 +60,6 @@
             <constructor-arg ref="dataSource"/>
         </bean>
 
-        <tx:annotation-driven/>
-
         <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
             <property name="dataSource" ref="dataSource"/>
         </bean>
@@ -94,8 +92,6 @@
                 </bean>
             </property>
         </bean>
-
-        <tx:annotation-driven/>
 
         <!-- Transaction manager for a single JPA EntityManagerFactory (alternative to JTA) -->
         <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
