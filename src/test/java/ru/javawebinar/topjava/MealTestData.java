@@ -16,7 +16,7 @@ import static ru.javawebinar.topjava.model.BaseEntity.START_SEQ;
  */
 public class MealTestData {
 
-    public static final ModelMatcher<Meal> MATCHER = new ModelMatcher<>();
+    public static final ModelMatcher<Meal> MATCHER = new ModelMatcher<>(Meal.class);
 
     public static final int MEAL1_ID = START_SEQ + 2;
     public static final int ADMIN_MEAL_ID = START_SEQ + 8;
