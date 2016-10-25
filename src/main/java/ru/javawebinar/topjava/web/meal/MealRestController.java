@@ -38,15 +38,14 @@ public class MealRestController extends AbstractMealController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Meal> createMeal(@RequestBody Meal meal) {
-//    public Meal create(@RequestBody Meal meal) {
         Meal created = super.create(meal);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_ROOT_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(created);
-//        return super.create(meal);
     }
 
+//    if I comment "@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)" than error - custom converter doesn't work
     @PostMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MealWithExceed> getBetween(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam("startDateTime") LocalDateTime startDateTime,
                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam("endDateTime") LocalDateTime endDateTime) {

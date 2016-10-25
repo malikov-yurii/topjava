@@ -84,6 +84,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetBetween() throws Exception {
+        AuthorizedUser.setId(USER_ID);
         TestUtil.print(mockMvc.perform(post(REST_URL + "filter?startDateTime=2015-05-30T00:00&endDateTime=2015-05-30T23:59"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
