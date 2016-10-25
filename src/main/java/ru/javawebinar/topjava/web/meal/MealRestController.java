@@ -45,10 +45,9 @@ public class MealRestController extends AbstractMealController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-//    if I comment "@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)" than error - custom converter doesn't work
     @PostMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<MealWithExceed> getBetween(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam("startDateTime") LocalDateTime startDateTime,
-                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) @RequestParam("endDateTime") LocalDateTime endDateTime) {
+    public List<MealWithExceed> getBetween(@RequestParam("startDateTime") LocalDateTime startDateTime,
+                                           @RequestParam("endDateTime") LocalDateTime endDateTime) {
         return super.getBetween(startDateTime.toLocalDate(), startDateTime.toLocalTime(), endDateTime.toLocalDate(), endDateTime.toLocalTime());
     }
 }

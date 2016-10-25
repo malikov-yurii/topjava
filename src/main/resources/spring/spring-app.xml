@@ -17,15 +17,4 @@
     <context:annotation-config/>
 
     <context:component-scan base-package="ru.javawebinar.**.service"/>
-
-    <mvc:annotation-driven conversion-service="conversionService"/>
-
-    <bean id="conversionService"
-          class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-        <property name="converters">
-            <set>
-                <bean class="ru.javawebinar.topjava.util.StringToLocalDateTime"/>
-            </set>
-        </property>
-    </bean>
 </beans>
