@@ -6,17 +6,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.TestUtil;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.Role;
-import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.to.MealWithExceed;
+import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
-import ru.javawebinar.topjava.web.user.AdminRestController;
-
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.Arrays;
-import java.util.Collections;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -27,19 +20,18 @@ import static ru.javawebinar.topjava.MealTestData.MEAL1_ID;
 import static ru.javawebinar.topjava.MealTestData.MEAL1;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
-import static ru.javawebinar.topjava.UserTestData.USER;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
+import static ru.javawebinar.topjava.web.meal.MealRestController.REST_ROOT_URL;
 
 public class MealRestControllerTest extends AbstractControllerTest {
-    private static final String REST_URL = MealRestController.REST_ROOT_URL + '/';
+    private static final String REST_URL = REST_ROOT_URL + '/';
 
-    @Test
+   @Test
     public void testGet() throws Exception {
         AuthorizedUser.setId(ADMIN_ID);
         mockMvc.perform(get(REST_URL + ADMIN_MEAL_ID))
                 .andExpect(status().isOk())
                 .andDo(print())
-// https://jira.spring.io/browse/SPR-14472
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MATCHER.contentMatcher(ADMIN_MEAL1));
     }
@@ -57,8 +49,6 @@ public class MealRestControllerTest extends AbstractControllerTest {
     public void testUpdate() throws Exception {
         AuthorizedUser.setId(USER_ID);
         Meal updated = getUpdated();
-//        updated.setName("UpdatedName");
-//        updated.setRoles(Collections.singletonList(Role.ROLE_ADMIN));
         mockMvc.perform(put(REST_URL + MEAL1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
@@ -89,9 +79,25 @@ public class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MATCHER_WITH_EXCEEDED.contentListMatcher(Arrays.asList(
-                        new MealWithExceed(MEAL3.getId(), MEAL3.getDateTime(), MEAL3.getDescription(),  MEAL3.getCalories(), false),
-                        new MealWithExceed(MEAL2.getId(), MEAL2.getDateTime(), MEAL2.getDescription(),  MEAL2.getCalories(), false),
-                        new MealWithExceed(MEAL1.getId(), MEAL1.getDateTime(), MEAL1.getDescription(),  MEAL1.getCalories(), false)
+                        MealsUtil.createWithExceed(MEAL3,false),
+                        MealsUtil.createWithExceed(MEAL2,false),
+                        MealsUtil.createWithExceed(MEAL1,false)
+                ))));
+    }
+
+    @Test
+    public void testGetAll() throws Exception {
+        AuthorizedUser.setId(USER_ID);
+        TestUtil.print(mockMvc.perform(get(REST_ROOT_URL))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MATCHER_WITH_EXCEEDED.contentListMatcher(Arrays.asList(
+                        MealsUtil.createWithExceed(MEAL6,true),
+                        MealsUtil.createWithExceed(MEAL5,true),
+                        MealsUtil.createWithExceed(MEAL4,true),
+                        MealsUtil.createWithExceed(MEAL3,false),
+                        MealsUtil.createWithExceed(MEAL2,false),
+                        MealsUtil.createWithExceed(MEAL1,false)
                 ))));
     }
 }
