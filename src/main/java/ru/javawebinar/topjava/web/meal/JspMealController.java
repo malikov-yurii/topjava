@@ -2,8 +2,9 @@ package ru.javawebinar.topjava.web.meal;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.TimeUtil;
 
@@ -22,25 +23,25 @@ import java.util.Objects;
 @RequestMapping(value = "/meals")
 public class JspMealController extends AbstractMealController {
 
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+    @GetMapping("/delete")
     public String delete(HttpServletRequest request) {
         super.delete(getId(request));
         return "redirect:/meals";
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.GET)
+    @GetMapping("/update")
     public String update(HttpServletRequest request, Model model) {
         model.addAttribute("meal", super.get(getId(request)));
         return "meal";
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    @GetMapping("/create")
     public String create(Model model) {
         model.addAttribute("meal", new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS), "", 1000));
         return "meal";
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public String updateOrCreate(HttpServletRequest request) {
         String id = request.getParameter("id");
         Meal userMeal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
@@ -56,20 +57,14 @@ public class JspMealController extends AbstractMealController {
         return "redirect:/meals";
     }
 
-    @RequestMapping(value = "/filter", method = RequestMethod.POST)
+    @PostMapping("/filter")
     public String getBetween(HttpServletRequest request, Model model) {
-        LocalDate startDate = TimeUtil.parseLocalDate(resetParam("startDate", request));
-        LocalDate endDate = TimeUtil.parseLocalDate(resetParam("endDate", request));
-        LocalTime startTime = TimeUtil.parseLocalTime(resetParam("startTime", request));
-        LocalTime endTime = TimeUtil.parseLocalTime(resetParam("endTime", request));
+        LocalDate startDate = TimeUtil.parseLocalDate(request.getParameter("startDate"));
+        LocalDate endDate = TimeUtil.parseLocalDate(request.getParameter("endDate"));
+        LocalTime startTime = TimeUtil.parseLocalTime(request.getParameter("startTime"));
+        LocalTime endTime = TimeUtil.parseLocalTime(request.getParameter("endTime"));
         model.addAttribute("meals", super.getBetween(startDate, startTime, endDate, endTime));
         return "meals";
-    }
-
-    private String resetParam(String param, HttpServletRequest request) {
-        String value = request.getParameter(param);
-        request.setAttribute(param, value);
-        return value;
     }
 
     private int getId(HttpServletRequest request) {

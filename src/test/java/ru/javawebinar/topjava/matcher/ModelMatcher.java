@@ -34,6 +34,14 @@ public class ModelMatcher<T> {
         boolean compare(T expected, T actual);
     }
 
+    public static <T> ModelMatcher<T> of(Class<T> entityClass) {
+        return new ModelMatcher<>(entityClass);
+    }
+
+    public static <T> ModelMatcher<T> of(Class<T> entityClass, Comparator<T> comparator) {
+        return new ModelMatcher<>(entityClass, comparator);
+    }
+
     public ModelMatcher(Class<T> entityClass) {
         this(entityClass, (Comparator<T>) DEFAULT_COMPARATOR);
     }

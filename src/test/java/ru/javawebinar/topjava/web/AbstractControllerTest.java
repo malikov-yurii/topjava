@@ -54,7 +54,7 @@ abstract public class AbstractControllerTest {
     private WebApplicationContext webApplicationContext;
 
     @PostConstruct
-    void postConstruct() {
+    private void postConstruct() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
                 .addFilter(CHARACTER_ENCODING_FILTER)
