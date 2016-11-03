@@ -23,6 +23,19 @@ function deleteRow(id) {
     });
 }
 
+function enable(chkbox, id) {
+    var enabled = chkbox.is(":checked");
+    $.ajax({
+        url: ajaxUrl + id,
+        type: 'POST',
+        data: 'enabled=' + enabled,
+        success: function () {
+            chkbox.closest('tr').fadeTo(300, enabled ? 1 : 0.3);
+            successNoty(enabled ? 'Enabled' : 'Disabled');
+        }
+    });
+}
+
 function updateTableByData(data) {
     datatableApi.fnClearTable();
     $.each(data, function (key, item) {
