@@ -16,15 +16,15 @@ public class JsonUtilTest {
     public void testReadWriteValue() throws Exception {
         String json = JsonUtil.writeValue(MealTestData.ADMIN_MEAL1);
         System.out.println(json);
-        Meal userMeal = JsonUtil.readValue(json, Meal.class);
-        MealTestData.MATCHER.assertEquals(MealTestData.ADMIN_MEAL1, userMeal);
+        Meal meal = JsonUtil.readValue(json, Meal.class);
+        MealTestData.MATCHER.assertEquals(MealTestData.ADMIN_MEAL1, meal);
     }
 
     @Test
     public void testReadWriteValues() throws Exception {
         String json = JsonUtil.writeValue(MealTestData.MEALS);
         System.out.println(json);
-        List<Meal> userMeals = JsonUtil.readValues(json, Meal.class);
-        MealTestData.MATCHER.assertCollectionEquals(MealTestData.MEALS, userMeals);
+        List<Meal> meal = JsonUtil.readValues(json, Meal.class);
+        MealTestData.MATCHER.assertCollectionEquals(MealTestData.MEALS, meal);
     }
 }
