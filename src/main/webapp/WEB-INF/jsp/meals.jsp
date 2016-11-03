@@ -148,29 +148,29 @@
     }
 
     $(function () {
-        datatableApi = $('#datatable').dataTable({
-            "bPaginate": false,
-            "bInfo": true,
-            "aoColumns": [
+        datatableApi = $('#datatable').DataTable({
+            "paging": false,
+            "info": true,
+            "columns": [
                 {
-                    "mData": "dateTime"
+                    "data": "dateTime"
                 },
                 {
-                    "mData": "description"
+                    "data": "description"
                 },
                 {
-                    "mData": "calories"
+                    "data": "calories"
                 },
                 {
-                    "sDefaultContent": "<fmt:message key="common.update"/>",
-                    "bSortable": false
+                    "defaultContent": "<fmt:message key="common.update"/>",
+                    "orderable": false
                 },
                 {
-                    "sDefaultContent": "<fmt:message key="common.delete"/>",
-                    "bSortable": false
+                    "defaultContent": "<fmt:message key="common.delete"/>",
+                    "orderable": false
                 }
             ],
-            "aaSorting": [
+            "order": [
                 [
                     0,
                     "desc"
