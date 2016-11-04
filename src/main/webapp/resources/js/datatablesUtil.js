@@ -1,20 +1,7 @@
 function makeEditable() {
-    /*$('.checkbox').change(function () {
-        // deleteRow($(this).attr("id"));
-        deleteRow($(this).closest('tr').attr('id'))
-    });*/
 
-    // $('input:checkbox').change(
-    //     function(){
-    //
-    //         saveActiveChange($(this).closest('tr').attr('id'));
-    //         /*if ($(this).is(':checked')) {
-    //             alert('checked');
-    //         }*/
-    //     });
 
     $('.delete').click(function () {
-        // deleteRow($(this).attr("id"));
         deleteRow($(this).closest('tr').attr('id'))
     });
 
@@ -24,7 +11,7 @@ function makeEditable() {
     });
 
     $('#filterForm').submit(function () {
-        updateTableFiltered();
+        updateTableWithData();
         return false;
     });
 
@@ -32,27 +19,15 @@ function makeEditable() {
         failNoty(event, jqXHR, options, jsExc);
     });
 }
-function updateTableFiltered() {
-    var form = $('#filterForm');
-    debugger;
+function updateTableWithData(data) {
     $.ajax({
         type: "POST",
-        url: ajaxUrl + "filtered",
-        data: form.serialize(),
+        url: ajaxUrl + "filter",
+        data: data,
         success: function () {
             updateTable();
             successNoty('Filter success');
         }
-    });
-}
-
-function updateTable() {
-    $.get(ajaxUrl, function (data) {
-        datatableApi.fnClearTable();
-        $.each(data, function (key, item) {
-            datatableApi.fnAddData(item);
-        });
-        datatableApi.fnDraw();
     });
 }
 
@@ -114,31 +89,3 @@ function failNoty(event, jqXHR, options, jsExc) {
         layout: 'bottomRight'
     });
 }
-
-
-// function saveActiveChange() {
-//     var data = $(this).dataTable( {
-//         "id": $(this).closest('tr').attr('id'),
-//         "name": $('#user_name').val(),
-//         "asdfname": $('#user').val().,
-//         "email": true,
-//         "password": "sources/sample.json",
-//         "registered": "sources/sample.json",
-//         "enabled": "sources/sample.json",
-//         "calories_per_day": "sources/sample.json"
-//     } );
-//     // debugger;
-//     $.ajax({
-//         type: "POST",
-//         url: ajaxUrl,
-//         // data: form.serialize(),
-//         data: form.constructor(),
-//         success: function () {
-//             // $('#editRow').modal('hide');
-//             updateTable();
-//             successNoty('Saved');
-//         }
-//     });
-// }
-
-

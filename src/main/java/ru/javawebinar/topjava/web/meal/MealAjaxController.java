@@ -4,15 +4,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.Role;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.MealWithExceed;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ajax/profile/meallist")
+@RequestMapping("/ajax/profile/meals")
 public class MealAjaxController extends AbstractMealController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -20,11 +20,12 @@ public class MealAjaxController extends AbstractMealController {
         return super.getAll();
     }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @RequestMapping("/ajax/profile/meallist/filtered")
-    public List<MealWithExceed> getAll(@RequestParam("start_date_time") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDateTime,
-                                       @RequestParam("end_date_time") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDateTime) {
-        return super.getBetween(startDateTime.toLocalDate(), startDateTime.toLocalTime(), endDateTime.toLocalDate(), endDateTime.toLocalTime());
+    @PostMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<MealWithExceed> getAll(@RequestParam("start_date") LocalDate startDate,
+                                       @RequestParam("end_date") LocalDate endDate,
+                                       @RequestParam("start_time") LocalTime startTime,
+                                       @RequestParam("end_time") LocalTime endTime) {
+        return super.getBetween(startDate, startTime, endDate, endTime);
     }
 
     @DeleteMapping("/{id}")

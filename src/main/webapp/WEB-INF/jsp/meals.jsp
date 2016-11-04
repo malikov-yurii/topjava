@@ -19,26 +19,40 @@ div class="jumbotron">
             <form class="form-horizontal" method="post" id="filterForm">
 
                 <div class="form-group">
-                    <label for="date_time" class="control-label col-xs-3">Start DateTime</label>
+                    <label for="date_time" class="control-label col-xs-3">Start Date</label>
 
                     <div class="col-xs-9">
-                        <input type="datetime-local" class="form-control" id="start_date_time" name="start_date_time"
-                               placeholder="Start DateTime">
+                        <input type="date-local" class="form-control" id="start_date" name="start_date"
+                               placeholder="Start Date">
+                    </div>
+
+                    <label for="date_time" class="control-label col-xs-3">End Date</label>
+
+                    <div class="col-xs-9">
+                        <input type="date-local" class="form-control" id="end_date" name="end_date"
+                               placeholder="End Date">
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="date_time" class="control-label col-xs-3">End DateTime</label>
+                    <label for="date_time" class="control-label col-xs-3">Start Time</label>
 
                     <div class="col-xs-9">
-                        <input type="datetime-local" class="form-control" id="end_date_time" name="end_date_time"
-                               placeholder="End DateTime">
+                        <input type="time-local" class="form-control" id="start_time" name="start_time"
+                               placeholder="Start Time">
+                    </div>
+
+                    <label for="date_time" class="control-label col-xs-3">End Time</label>
+
+                    <div class="col-xs-9">
+                        <input type="time-local" class="form-control" id="end_time" name="end_time"
+                               placeholder="End Time">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-xs-offset-3 col-xs-9">
-                        <button type="submit" class="btn btn-primary">Filter</button>
+                        <button type="button" class="btn btn-primary" onclick="updateTable()">Filter</button>
                     </div>
                 </div>
             </form>
@@ -135,42 +149,21 @@ div class="jumbotron">
 <script type="text/javascript" src="resources/js/datatablesUtil.js"></script>
 <script type="text/javascript">
 
-    var ajaxUrl = 'ajax/profile/meallist/';
+    var ajaxUrl = 'ajax/profile/meals/';
     var datatableApi;
-    //    var filterApi;
 
-       $(function () {
-//     filterApi = $('#filterForm').dataTable({
-//     "bPaginate": false,
-//     "bInfo": false,
-//     "aoColumns": [
-//     {
-//     "mData": "start_date_time"
-//     },
-//     {
-//     "mData": "end_date_time"
-//     }
-//     ],
-//     "aaSorting": [
-//     [
-//     0,
-//     "asc"
-//     ]
-//     ]
-//     });*/
-
-    datatableApi = $('#datatable').dataTable({
-        "bPaginate": false,
-        "bInfo": false,
-        "aoColumns": [
+    datatableApi = $('#datatable').DataTable({
+        "paging": false,
+        "info": false,
+        "columns": [
             {
-                "mData": "date_time"
+                "data": "date_time"
             },
             {
-                "mData": "description"
+                "data": "description"
             },
             {
-                "mData": "calories"
+                "data": "calories"
             },
             {
                 "sDefaultContent": "Edit",
@@ -188,8 +181,17 @@ div class="jumbotron">
             ]
         ]
     });
+
     makeEditable();
-    })
-    ;
+
+    function updateTable() {
+        $.ajax({
+            type: "POST",
+            url: ajaxUrl + "filter",
+            data: $('#filterForm').serialize(),
+            success: updateTableWithData
+        });
+    }
+
 </script>
 </html>
