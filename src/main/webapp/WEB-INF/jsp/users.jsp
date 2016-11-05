@@ -40,7 +40,7 @@
                                        <c:if test="${user.enabled}">checked</c:if> onclick="enable($(this), ${user.id})"/>
                             </td>
                             <td><fmt:formatDate value="${user.registered}" pattern="dd-MMMM-yyyy"/></td>
-                            <td><a class="btn btn-xs btn-primary"><fmt:message key="common.update"/></a></td>
+                            <td><a class="btn btn-xs btn-primary"  onclick="updateRow(${user.id})"><fmt:message key="common.update"/></a></td>
                             <td><a class="btn btn-xs btn-danger" onclick="deleteRow(${user.id})"><fmt:message key="common.delete"/></a></td>
                         </tr>
                     </c:forEach>
