@@ -29,21 +29,6 @@
                         <th></th>
                     </tr>
                     </thead>
-                    <c:forEach items="${users}" var="user">
-                        <jsp:useBean id="user" scope="page" type="ru.javawebinar.topjava.model.User"/>
-                        <tr>
-                            <td><c:out value="${user.name}"/></td>
-                            <td><a href="mailto:${user.email}">${user.email}</a></td>
-                            <td>${user.roles}</td>
-                            <td>
-                                <input type="checkbox"
-                                       <c:if test="${user.enabled}">checked</c:if> onclick="enable($(this), ${user.id})"/>
-                            </td>
-                            <td><fmt:formatDate value="${user.registered}" pattern="dd-MMMM-yyyy"/></td>
-                            <td><a class="btn btn-xs btn-primary"  onclick="updateRow(${user.id})"><fmt:message key="common.update"/></a></td>
-                            <td><a class="btn btn-xs btn-danger" onclick="deleteRow(${user.id})"><fmt:message key="common.delete"/></a></td>
-                        </tr>
-                    </c:forEach>
                 </table>
             </div>
         </div>
@@ -103,58 +88,5 @@
 <script type="text/javascript" src="webjars/datatables/1.10.12/js/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript" src="webjars/noty/2.3.8/js/noty/packaged/jquery.noty.packaged.min.js"></script>
 <script type="text/javascript" src="resources/js/datatablesUtil.js"></script>
-<script type="text/javascript">
-
-    var ajaxUrl = 'ajax/admin/users/';
-    var datatableApi;
-
-    function updateTable() {
-        $.get(ajaxUrl, updateTableByData);
-    }
-
-    // $(document).ready(function () {
-    $(function () {
-        datatableApi = $('#datatable').DataTable({
-            "paging": false,
-            "info": true,
-            "columns": [
-                {
-                    "data": "name"
-                },
-                {
-                    "data": "email"
-                },
-                {
-                    "data": "roles"
-                },
-                {
-                    "data": "enabled"
-                },
-                {
-                    "data": "registered"
-                },
-                {
-                    "defaultContent": "<fmt:message key="common.update"/>",
-                    "orderable": false
-                },
-                {
-                    "defaultContent": "<fmt:message key="common.delete"/>",
-                    "orderable": false
-                }
-            ],
-            "order": [
-                [
-                    0,
-                    "asc"
-                ]
-            ]
-        });
-        $(':checkbox').each(function () {
-            if (!$(this).is(":checked")) {
-                $(this).closest('tr').css("opacity", 0.3);
-            }
-        });
-        makeEditable();
-    });
-</script>
+<script type="text/javascript" src="resources/js/userDatatables.js"></script>
 </html>

@@ -89,3 +89,15 @@ function failNoty(event, jqXHR, options, jsExc) {
         layout: 'bottomRight'
     });
 }
+
+function renderEditBtn(data, type, row) {
+    if (type == 'display') {
+        return '<a class="btn btn-xs btn-primary" onclick="updateRow(' + row.id + ');">Edit</a>';
+    }
+}
+
+function renderDeleteBtn(data, type, row) {
+    if (type == 'display') {
+        return '<a class="btn btn-xs btn-danger" onclick="deleteRow(' + row.id + ');">Delete</a>';
+    }
+}
