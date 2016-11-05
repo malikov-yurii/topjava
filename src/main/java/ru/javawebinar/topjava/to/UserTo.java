@@ -1,12 +1,21 @@
 package ru.javawebinar.topjava.to;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.Size;
+
 public class UserTo {
     private Integer id;
 
+    @NotEmpty
     private String name;
 
+    @Email
+    @NotEmpty
     private String email;
 
+    @Size(min = 5, max = 64, message = " must between 5 and 64 characters")
     private String password;
 
     public UserTo() {
