@@ -15,7 +15,7 @@
             <h3><fmt:message key="users.title"/></h3>
 
             <div class="view-box">
-                <a class="btn btn-sm btn-info" onclick="add()"><fmt:message key="users.add"/></a>
+                <a class="btn btn-sm btn-info" onclick="add('<fmt:message key="users.add"/>')"><fmt:message key="users.add"/></a>
 
                 <table class="table table-striped display" id="datatable">
                     <thead>
@@ -41,7 +41,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title"><fmt:message key="users.add"/></h2>
+                <h2 class="modal-title" id="modalTitle"></h2>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" method="post" id="detailsForm">
@@ -82,6 +82,13 @@
     </div>
 </div>
 </body>
+<script type="text/javascript">
+var i18n = [];
+    <c:forEach var='key' items='<%=new String[]{"common.update","common.delete","common.deleted","common.saved","common.enabled","common.disabled","common.failed"}%>'>
+i18n['${key}'] = '<fmt:message key="${key}"/>';
+    </c:forEach>
+var edit_title ='<fmt:message key="users.edit"/>';
+</script>
 <script type="text/javascript" src="webjars/jquery/2.2.4/jquery.min.js"></script>
 <script type="text/javascript" src="webjars/bootstrap/3.3.7-1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="webjars/datatables/1.10.12/js/jquery.dataTables.min.js"></script>
