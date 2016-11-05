@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava;
 
 import ru.javawebinar.topjava.model.BaseEntity;
-import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.util.UserUtil;
 
 /**
  * GKislin
@@ -19,6 +19,6 @@ public class AuthorizedUser {
     }
 
     public static int getCaloriesPerDay() {
-        return MealsUtil.DEFAULT_CALORIES_PER_DAY;
+        return UserUtil.DEFAULT_CALORIES_PER_DAY;
     }
 }
