@@ -14,6 +14,7 @@ function add(add_title) {
 }
 
 function updateRow(id) {
+    debugger;
     $('#modalTitle').html(edit_title);
     $.get(ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
@@ -24,6 +25,7 @@ function updateRow(id) {
 }
 
 function deleteRow(id) {
+    debugger;
     $.ajax({
         url: ajaxUrl + id,
         type: 'DELETE',
