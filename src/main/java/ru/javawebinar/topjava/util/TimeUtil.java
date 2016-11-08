@@ -12,7 +12,9 @@ import java.time.format.DateTimeFormatter;
  * 07.01.2015.
  */
 public class TimeUtil {
-    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     public static final LocalDate MIN_DATE = LocalDate.of(1, 1, 1);
     public static final LocalDate MAX_DATE = LocalDate.of(3000, 1, 1);
@@ -29,11 +31,11 @@ public class TimeUtil {
     }
 
     public static LocalDate parseLocalDate(String str) {
-        return StringUtils.isEmpty(str) ? null : LocalDate.parse(str);
+        return StringUtils.isEmpty(str) ? null : LocalDate.parse(str, DATE_FORMATTER);
     }
 
     public static LocalTime parseLocalTime(String str) {
-        return StringUtils.isEmpty(str) ? null : LocalTime.parse(str);
+        return StringUtils.isEmpty(str) ? null : LocalTime.parse(str, TIME_FORMATTER);
     }
 
     public static LocalDateTime parseLocalDateTime(String str) {
