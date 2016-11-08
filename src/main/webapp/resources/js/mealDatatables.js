@@ -1,6 +1,10 @@
 var ajaxUrl = 'ajax/profile/meals/';
 var datatableApi;
 
+/*function updateFilteredTable() {
+    $.get(ajaxUrl + 'filter', updateTableByData);
+}*/
+
 function updateTable() {
     $.get(ajaxUrl, updateTableByData);
 }

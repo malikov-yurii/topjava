@@ -16,7 +16,7 @@ function makeEditable() {
 
     jQuery('#datepicker1').datetimepicker({
         timepicker:false,
-        format:'d.m.Y'
+        format:'Y/m/d'
     });
 
     jQuery('#timepicker2').datetimepicker({
@@ -26,7 +26,7 @@ function makeEditable() {
 
     jQuery('#datepicker2').datetimepicker({
         timepicker:false,
-        format:'d.m.Y'
+        format:'Y/m/d'
     });
 }
 
