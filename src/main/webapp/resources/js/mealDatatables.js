@@ -34,18 +34,19 @@ $(function () {
                 "render": renderDeleteBtn
             }
         ],
-
+        "createdRow": function (row, data, dataIndex) {
+            if (data.exceed) {
+                $(row).css("color", "red");
+            } else {
+                $(row).css("color", "blue");
+            }
+        },
         "order": [
             [
                 0,
                 "desc"
             ]
         ],
-        // "createdRow": function (row, data, dataIndex) {
-        //     if (!data.enabled) {
-        //         $(row).css("opacity", 0.3);
-        //     }
-        // },
         "initComplete": makeEditable
     });
 });

@@ -60,20 +60,6 @@
                         <th></th>
                     </tr>
                     </thead>
-                    <%--<c:forEach items="${meals}" var="meal">--%>
-                        <%--<jsp:useBean id="meal" scope="page" type="ru.javawebinar.topjava.to.MealWithExceed"/>--%>
-                        <%--<tr class="${meal.exceed ? 'exceeded' : 'normal'}">--%>
-                            <%--<td>--%>
-                                    <%--&lt;%&ndash;<fmt:parseDate value="${meal.dateTime}" pattern="y-M-dd'T'H:m" var="parsedDate"/>&ndash;%&gt;--%>
-                                    <%--&lt;%&ndash;<fmt:formatDate value="${parsedDate}" pattern="yyyy.MM.dd HH:mm" />&ndash;%&gt;--%>
-                                    <%--${fn:formatDateTime(meal.dateTime)}--%>
-                            <%--</td>--%>
-                            <%--<td>${meal.description}</td>--%>
-                            <%--<td>${meal.calories}</td>--%>
-                            <%--<td><a class="btn btn-xs btn-primary" onclick="updateRow(${meal.id})"><fmt:message key="common.update"/></a></td>--%>
-                            <%--<td><a class="btn btn-xs btn-danger"  onclick="deleteRow(${meal.id})"><fmt:message key="common.delete"/></a></td>--%>
-                        <%--</tr>--%>
-                    <%--</c:forEach>--%>
                 </table>
             </div>
         </div>
