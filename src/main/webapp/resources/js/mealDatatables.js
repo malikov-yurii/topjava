@@ -4,9 +4,19 @@ var datatableApi;
 /*function updateFilteredTable() {
     $.get(ajaxUrl + 'filter', updateTableByData);
 }*/
-
+/*
 function updateTable() {
     $.get(ajaxUrl, updateTableByData);
+}*/
+
+function updateTable() {
+    debugger;
+    $.ajax({
+        type: "POST",
+        url: ajaxUrl + 'filter',
+        data: $('#filter').serialize(),
+        success: updateTableByData
+    });
 }
 
 $(function () {

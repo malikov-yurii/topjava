@@ -57,7 +57,13 @@ public class MealAjaxController extends AbstractMealController {
             @RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate startDate,
             @RequestParam(value = "startTime", required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime startTime,
             @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate endDate,
-            @RequestParam(value = "endTime", required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime endTime) {
+            @RequestParam(value = "endTime", required = false) @DateTimeFormat(pattern = "HH:mm") LocalTime endTime
+//
+//            @RequestParam(value = "startDate", required = false) @DateTimeFormat(pattern = "yyyy%2FMM%2Fdd") LocalDate startDate,
+//            @RequestParam(value = "startTime", required = false) @DateTimeFormat(pattern = "HH%3Amm") LocalTime startTime,
+//            @RequestParam(value = "endDate", required = false) @DateTimeFormat(pattern = "yyyy%2FMM%2Fdd") LocalDate endDate,
+//            @RequestParam(value = "endTime", required = false) @DateTimeFormat(pattern = "HH%3Amm") LocalTime endTime
+    ){
         return super.getBetween(startDate, startTime, endDate, endTime);
     }
 }

@@ -73,6 +73,7 @@ function enable(chkbox, id) {
 }
 
 function updateTableByData(data) {
+    debugger;
     datatableApi.clear().rows.add(data).draw();
 }
 
