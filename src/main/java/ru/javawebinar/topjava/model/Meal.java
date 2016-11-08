@@ -1,8 +1,10 @@
 package ru.javawebinar.topjava.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.javawebinar.topjava.util.CustomDateTimeSerializer;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -36,6 +38,7 @@ public class Meal extends BaseEntity {
     @NotNull
 //    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm")
+    @JsonSerialize(using = CustomDateTimeSerializer.class)
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
