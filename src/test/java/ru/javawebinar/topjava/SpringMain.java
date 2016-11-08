@@ -11,6 +11,9 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
+import static ru.javawebinar.topjava.TestUtil.mockAuthorize;
+import static ru.javawebinar.topjava.UserTestData.USER;
+
 /**
  * User: gkislin
  * Date: 22.08.2014
@@ -23,9 +26,11 @@ public class SpringMain {
             appCtx.load("spring/spring-app.xml", "spring/spring-db.xml", "spring/spring-mvc.xml");
             appCtx.refresh();
 
+            mockAuthorize(USER);
+
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
-            adminUserController.create(UserTestData.USER);
+            adminUserController.get(UserTestData.USER_ID);
             System.out.println();
 
             MealRestController mealController = appCtx.getBean(MealRestController.class);
