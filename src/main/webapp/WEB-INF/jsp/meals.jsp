@@ -6,6 +6,7 @@
 <html>
 <jsp:include page="fragments/headTag.jsp"/>
 <link rel="stylesheet" href="webjars/datatables/1.10.12/css/dataTables.bootstrap.min.css">
+<link rel="stylesheet" href="webjars/datetimepicker/2.4.7/jquery.datetimepicker.css"/>
 
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
@@ -18,29 +19,29 @@
             <div class="view-box">
                 <form method="post" class="form-horizontal" role="form" id="filter">
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="startDate"><fmt:message key="meals.startDate"/>:</label>
+                        <label class="control-label col-sm-2" for="datepicker1"><fmt:message key="meals.startDate"/>:</label>
 
                         <div class="col-sm-2">
-                            <input class="form-control" type="date" name="startDate" id="startDate">
+                            <input class="form-control" type="text" name="startDate" id="datepicker1">
                         </div>
 
-                        <label class="control-label col-sm-2" for="endDate"><fmt:message key="meals.endDate"/>:</label>
+                        <label class="control-label col-sm-2" for="datepicker2"><fmt:message key="meals.endDate"/>:</label>
 
                         <div class="col-sm-2">
-                            <input class="form-control" type="date" name="endDate" id="endDate">
+                            <input class="form-control" type="text" name="endDate" id="datepicker2">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="startTime"><fmt:message key="meals.startTime"/>:</label>
+                        <label class="control-label col-sm-2" for="timepicker1"><fmt:message key="meals.startTime"/>:</label>
 
                         <div class="col-sm-2">
-                            <input class="form-control" type="time" name="startTime" id="startTime">
+                            <input class="form-control" type="text" name="startTime" id="timepicker1">
                         </div>
 
-                        <label class="control-label col-sm-2" for="endTime"><fmt:message key="meals.endTime"/>:</label>
+                        <label class="control-label col-sm-2" for="timepicker2"><fmt:message key="meals.endTime"/>:</label>
 
                         <div class="col-sm-2">
-                            <input class="form-control" type="time" name="endTime" id="endTime">
+                            <input class="form-control" type="text" name="endTime" id="timepicker2">
                         </div>
                     </div>
                     <div class="form-group">
@@ -79,11 +80,10 @@
                     <input type="hidden" id="id" name="id">
 
                     <div class="form-group">
-                        <label for="dateTime" class="control-label col-xs-3"><fmt:message key="meals.dateTime"/></label>
+                        <label for="datetimepicker" class="control-label col-xs-3"><fmt:message key="meals.dateTime"/></label>
 
                         <div class="col-xs-9">
-                            <input type="datetime-local" class="form-control" id="dateTime"
-                                   name="dateTime" placeholder="<fmt:message key="meals.dateTime"/>">
+                            <input id="datetimepicker" type="text"  name="dateTime" placeholder="<fmt:message key="meals.dateTime"/>">
                         </div>
                     </div>
                     <div class="form-group">
@@ -128,4 +128,5 @@
 <script type="text/javascript" src="webjars/noty/2.3.8/js/noty/packaged/jquery.noty.packaged.min.js"></script>
 <script type="text/javascript" src="resources/js/datatablesUtil.js"></script>
 <script type="text/javascript" src="resources/js/mealDatatables.js"></script>
+<script type="text/javascript" src="webjars/datetimepicker/2.4.7/build/jquery.datetimepicker.full.min.js"></script>
 </html>

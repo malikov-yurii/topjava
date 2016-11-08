@@ -1,9 +1,32 @@
 var form;
 
 function makeEditable() {
+
     form = $('#detailsForm');
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(event, jqXHR, options, jsExc);
+    });
+
+    jQuery('#datetimepicker').datetimepicker();
+
+    jQuery('#timepicker1').datetimepicker({
+        datepicker:false,
+        format:'H:i'
+    });
+
+    jQuery('#datepicker1').datetimepicker({
+        timepicker:false,
+        format:'d.m.Y'
+    });
+
+    jQuery('#timepicker2').datetimepicker({
+        datepicker:false,
+        format:'H:i'
+    });
+
+    jQuery('#datepicker2').datetimepicker({
+        timepicker:false,
+        format:'d.m.Y'
     });
 }
 
