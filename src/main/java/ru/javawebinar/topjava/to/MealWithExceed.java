@@ -23,7 +23,7 @@ public class MealWithExceed {
     private final boolean exceed;
 
     public MealWithExceed(@JsonProperty("id") Integer id,
-                          @JsonProperty("dateTime") /*@JsonSerialize(using = CustomDateTimeSerializer.class)*/ LocalDateTime dateTime,
+                          @JsonProperty("dateTime") LocalDateTime dateTime,
                           @JsonProperty("description") String description,
                           @JsonProperty("calories") int calories,
                           @JsonProperty("exceed") boolean exceed) {

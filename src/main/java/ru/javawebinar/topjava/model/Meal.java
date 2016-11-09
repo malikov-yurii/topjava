@@ -36,7 +36,6 @@ public class Meal extends BaseEntity {
 
     @Column(name = "date_time", nullable = false)
     @NotNull
-//    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     private LocalDateTime dateTime;
