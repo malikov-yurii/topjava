@@ -50,7 +50,7 @@
                         </div>
                     </div>
                 </form>
-                <a class="btn btn-sm btn-info" onclick="add()"><fmt:message key="meals.add"/></a>
+                <a class="btn btn-sm btn-info" onclick="add('<fmt:message key="meals.add"/>')"><fmt:message key="meals.add"/></a>
                 <table class="table table-striped display" id="datatable">
                     <thead>
                     <tr>
@@ -73,7 +73,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h2 class="modal-title"><fmt:message key="meals.add"/></h2>
+                <h2 class="modal-title" id="modalTitle"></h2>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" method="post" id="detailsForm">
@@ -113,12 +113,9 @@
         </div>
     </div>
 </div>
+<jsp:include page="fragments/localization.jsp"/>
 </body>
 <script type="text/javascript">
-    var i18n = [];
-    <c:forEach var='key' items='<%=new String[]{"common.update","common.delete","common.deleted","common.saved","common.enabled","common.disabled","common.failed"}%>'>
-    i18n['${key}'] = '<fmt:message key="${key}"/>';
-    </c:forEach>
     var edit_title ='<fmt:message key="meals.edit"/>';
 </script>
 <script type="text/javascript" src="webjars/jquery/2.2.4/jquery.min.js"></script>

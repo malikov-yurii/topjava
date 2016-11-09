@@ -6,3 +6,4 @@
         <fmt:message key="app.footer"/>
     </div>
 </div>
+

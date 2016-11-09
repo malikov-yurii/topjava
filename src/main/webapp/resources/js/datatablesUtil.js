@@ -1,7 +1,6 @@
 var form;
 
 function makeEditable() {
-
     form = $('#detailsForm');
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(event, jqXHR, options, jsExc);
@@ -37,7 +36,6 @@ function add(add_title) {
 }
 
 function updateRow(id) {
-    debugger;
     $('#modalTitle').html(edit_title);
     $.get(ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
