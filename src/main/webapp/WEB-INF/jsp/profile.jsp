@@ -15,11 +15,20 @@
 <div class="jumbotron">
     <div class="container">
         <div class="shadow">
-            <h2>${userTo.name} <fmt:message key="app.profile"/></h2>
+            <h3>
+                <c:if test="${register}">
+                    <fmt:message key="app.register"/>
+                    <fmt:message key="common.add" var="saveButton"/>
+                </c:if>
+                <c:if test="${not register}">
+                    ${userTo.name} <fmt:message key="app.profile"/>
+                    <fmt:message key="common.update" var="saveButton"/>
+                </c:if>
+            </h3>
 
             <div class="view-box">
-                <form:form modelAttribute="userTo" class="form-horizontal" method="post" action="profile"
-                           charset="utf-8" accept-charset="UTF-8">
+                <form:form modelAttribute="userTo" class="form-horizontal" method="post"
+                           action="${register ? 'register' : 'profile'}" charset="utf-8" accept-charset="UTF-8">
 
                     <fmt:message key="users.name" var="userName"/>
                     <topjava:inputField label='${userName}' name="name"/>
@@ -35,7 +44,7 @@
 
                     <div class="form-group">
                         <div class="col-xs-offset-2 col-xs-10">
-                            <button type="submit" class="btn btn-primary"><fmt:message key="common.update"/></button>
+                            <button type="submit" class="btn btn-primary">${saveButton}</button>
                         </div>
                     </div>
                 </form:form>
