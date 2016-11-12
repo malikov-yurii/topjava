@@ -49,6 +49,7 @@ public class MealAjaxController extends AbstractMealController {
 
     @PostMapping
     public ResponseEntity<String> updateOrCreate(@Valid Meal meal, BindingResult result) {
+        // TODO change to exception handler
         if (result.hasErrors()) {
             StringBuilder sb = new StringBuilder();
             result.getFieldErrors().forEach(fe -> sb.append(fe.getField()).append(" ").append(fe.getDefaultMessage()).append("<br>"));
