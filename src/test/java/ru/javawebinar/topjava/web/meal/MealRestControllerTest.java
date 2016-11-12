@@ -49,6 +49,21 @@ public class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    public void testGetNotFound() throws Exception {
+        mockMvc.perform(get(REST_URL + ADMIN_MEAL_ID)
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testDeleteNotFound() throws Exception {
+        mockMvc.perform(delete(REST_URL + ADMIN_MEAL_ID)
+                .with(userHttpBasic(USER)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     public void testDelete() throws Exception {
         mockMvc.perform(delete(REST_URL + MEAL1_ID)
                 .with(userHttpBasic(USER)))
@@ -117,7 +132,6 @@ public class MealRestControllerTest extends AbstractControllerTest {
                         MealsUtil.createWithExceed(MEAL4, true),
                         MealsUtil.createWithExceed(MEAL1, false)));
     }
-
 
     @Test
     public void testFilterAll() throws Exception {
