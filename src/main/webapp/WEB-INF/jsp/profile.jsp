@@ -17,12 +17,12 @@
         <div class="shadow">
             <h3>
                 <c:if test="${register}">
-                    <fmt:message key="app.register"/>
-                    <fmt:message key="common.add" var="saveButton"/>
+                    <spring:message code="app.register"/>
+                    <spring:message code="common.add" var="saveButton"/>
                 </c:if>
                 <c:if test="${not register}">
-                    ${userTo.name} <fmt:message key="app.profile"/>
-                    <fmt:message key="common.update" var="saveButton"/>
+                    ${userTo.name} <spring:message code="app.profile"/>
+                    <spring:message code="common.update" var="saveButton"/>
                 </c:if>
             </h3>
 
@@ -30,16 +30,16 @@
                 <form:form modelAttribute="userTo" class="form-horizontal" method="post"
                            action="${register ? 'register' : 'profile'}" charset="utf-8" accept-charset="UTF-8">
 
-                    <fmt:message key="users.name" var="userName"/>
+                    <spring:message code="users.name" var="userName"/>
                     <topjava:inputField label='${userName}' name="name"/>
 
-                    <fmt:message key="users.email" var="userEmail"/>
+                    <spring:message code="users.email" var="userEmail"/>
                     <topjava:inputField label='${userEmail}' name="email"/>
 
-                    <fmt:message key="users.password" var="userPassword"/>
+                    <spring:message code="users.password" var="userPassword"/>
                     <topjava:inputField label='${userPassword}' name="password" inputType="password"/>
 
-                    <fmt:message key="users.caloriesPerDay" var="caloriesPerDay"/>
+                    <spring:message code="users.caloriesPerDay" var="caloriesPerDay"/>
                     <topjava:inputField label='${caloriesPerDay}' name="caloriesPerDay" inputType="number"/>
 
                     <div class="form-group">
