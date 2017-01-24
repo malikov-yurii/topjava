@@ -1,12 +1,17 @@
 package ru.javawebinar.topjava.web.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import ru.javawebinar.topjava.Profiles;
+import ru.javawebinar.topjava.model.BaseEntity;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.to.UserTo;
 
+import javax.validation.ValidationException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,6 +22,19 @@ public abstract class AbstractUserController {
 
     @Autowired
     private UserService service;
+
+    private boolean systemUserForbiddenModification;
+
+    @Autowired
+    public void setEnvironment(Environment environment) {
+        systemUserForbiddenModification = Arrays.asList(environment.getActiveProfiles()).contains(Profiles.HEROKU);
+    }
+
+    public void checkModificationAllowed(Integer id) {
+        if (systemUserForbiddenModification && id < BaseEntity.START_SEQ + 2) {
+            throw new ValidationException("Admin/User modification is not allowed. <br><br><a class=\"btn btn-primary btn-lg\" role=\"button\" href=\"register\">Register &raquo;</a> your own please.");
+        }
+    }
 
     public List<User> getAll() {
         log.info("getAll");
@@ -35,17 +53,20 @@ public abstract class AbstractUserController {
     }
 
     public void delete(int id) {
+        checkModificationAllowed(id);
         log.info("delete " + id);
         service.delete(id);
     }
 
     public void update(User user, int id) {
+        checkModificationAllowed(id);
         user.setId(id);
         log.info("update " + user);
         service.update(user);
     }
 
     public void update(UserTo userTo) {
+        checkModificationAllowed(userTo.getId());
         log.info("update " + userTo);
         service.update(userTo);
     }
@@ -56,6 +77,7 @@ public abstract class AbstractUserController {
     }
 
     public void enable(int id, boolean enabled) {
+        checkModificationAllowed(id);
         log.info((enabled ? "enable " : "disable ") + id);
         service.enable(id, enabled);
     }
