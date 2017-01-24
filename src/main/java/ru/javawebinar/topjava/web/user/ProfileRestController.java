@@ -6,6 +6,8 @@ import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
 
+import javax.validation.Valid;
+
 /**
  * GKislin
  * 06.03.2015.
@@ -26,7 +28,7 @@ public class ProfileRestController extends AbstractUserController {
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@RequestBody UserTo userTo) {
+    public void update(@Valid @RequestBody UserTo userTo) {
         userTo.setId(AuthorizedUser.id());
         super.update(userTo);
     }
