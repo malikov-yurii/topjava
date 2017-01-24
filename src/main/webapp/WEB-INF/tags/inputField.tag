@@ -7,8 +7,7 @@
 <%@ attribute name="inputType" required="false" description="Input type" %>
 
 <spring:bind path="${name}">
-    <c:set var="cssGroup" value="form-group ${status.error ? 'error' : '' }"/>
-    <div class="${cssGroup}">
+    <div class="form-group ${status.error ? 'error' : '' }">
         <label class="control-label col-xs-2">${label}</label>
 
         <div class="col-xs-8">

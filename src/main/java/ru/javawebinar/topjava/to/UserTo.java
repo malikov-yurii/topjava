@@ -75,7 +75,7 @@ public class UserTo implements Serializable {
         return id == null;
     }
 
-    public int getCaloriesPerDay() {
+    public Integer getCaloriesPerDay() {
         return caloriesPerDay;
     }
 
