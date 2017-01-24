@@ -20,7 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 public class ExceptionInfoHandler {
     Logger LOG = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+//  http://stackoverflow.com/a/22358422/548473
+    @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(NotFoundException.class)
     @ResponseBody
     @Order(Ordered.HIGHEST_PRECEDENCE)
