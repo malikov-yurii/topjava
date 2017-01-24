@@ -52,7 +52,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
     public void testGetNotFound() throws Exception {
         mockMvc.perform(get(REST_URL + ADMIN_MEAL_ID)
                 .with(userHttpBasic(USER)))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -60,7 +60,7 @@ public class MealRestControllerTest extends AbstractControllerTest {
         mockMvc.perform(delete(REST_URL + ADMIN_MEAL_ID)
                 .with(userHttpBasic(USER)))
                 .andDo(print())
-                .andExpect(status().isNotFound());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
