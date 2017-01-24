@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
+import org.hibernate.validator.constraints.SafeHtml;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -39,6 +40,7 @@ public class Meal extends BaseEntity {
 
     @Column(name = "description", nullable = false)
     @NotEmpty
+    @SafeHtml
     private String description;
 
     @Column(name = "calories", nullable = false)

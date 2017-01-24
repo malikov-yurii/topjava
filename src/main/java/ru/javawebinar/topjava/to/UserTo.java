@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.to;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
+import org.hibernate.validator.constraints.SafeHtml;
 import ru.javawebinar.topjava.util.UserUtil;
 
 import javax.validation.constraints.NotNull;
@@ -15,13 +16,16 @@ public class UserTo implements Serializable {
     private Integer id;
 
     @NotEmpty
+    @SafeHtml
     private String name;
 
     @Email
     @NotEmpty
+    @SafeHtml
     private String email;
 
     @Size(min = 5, max = 64, message = " must between 5 and 64 characters")
+    @SafeHtml
     private String password;
 
     @Range(min = 100, max = 5000)
